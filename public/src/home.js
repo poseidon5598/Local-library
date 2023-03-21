@@ -8,10 +8,12 @@ function getTotalAccountsCount(accounts) {
 
 function getBooksBorrowedCount(books) {
   let sum=0;
-  for(let i=0;i<books.length;i++){
-    if(books[i].borrows[0].returned==false) sum+=1
-  }
-  return sum;
+  const filtered=books.filter(book=>{
+   if(book.borrows[0].returned == false){
+    sum+=1
+   }
+})
+return sum;
 }
 
 function getMostCommonGenres(books) {
@@ -34,7 +36,7 @@ function getMostCommonGenres(books) {
   console.log(orderedGenres);
   console.log(genres);
  const orderedKeys= orderedGenres.slice(0,5);
-  orderedKeys.forEach(key=>{
+  orderedKeys.map(key=>{
     arrayToReturn.push({name:key,count:genres[key]});
   })
   return arrayToReturn;
@@ -42,13 +44,15 @@ function getMostCommonGenres(books) {
 
 function getMostPopularBooks(books) {
   let finalArray=[];
-  const booksOrdered=books.sort((a,b)=>{
-   if(a.borrows.length<b.borrows.length){
+  function compare(x,y){
+    if(x<y)
       return 1;
-    }else{
+    else
       return -1;
-    }
-  })
+   }
+  const booksOrdered=books.sort((a,b)=>{
+    return compare(a.borrows.length,b.borrows.length);
+  });
   console.log(booksOrdered)
   const booksName=booksOrdered.forEach(book=>{
     let finalObject={};
